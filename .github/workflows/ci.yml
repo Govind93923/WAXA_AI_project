@@ -1,26 +1,41 @@
-steps:
-  # 1. Checkout the repository code
-  - name: Checkout repository
-    uses: actions/checkout@v4
+name: Build and Push Docker Image
 
-  # 2. Generate a fully lowercase repository name (OWNER/REPO)
-  - name: Generate lowercase repo name
-    id: repo_name
-    run: echo "repo_name_lc=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+# This workflow runs on any push to the 'main' branch
+on:
+  push:
+    branches: [ "main" ]
 
-  # 3. Log in to the GitHub Container Registry (GHCR)
-  - name: Log in to GHCR
-    uses: docker/login-action@v3
-    with:
-      registry: ghcr.io
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    # We need write permissions for packages to push to GHCR
+    permissions:
+      contents: read
+      packages: write
 
-  # 4. Build and push the Docker image
-  - name: Build and push Docker image
-    uses: docker/build-push-action@v5
-    with:
-      context: .
-      push: true
-      # Use the new lowercase environment variable
-      tags: ghcr.io/${{ env.repo_name_lc }}:${{ github.sha }}
+    steps:
+      # 1. Checkout the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Generate a fully lowercase repository name (OWNER/REPO)
+      - name: Generate lowercase repo name
+        id: repo_name
+        run: echo "repo_name_lc=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      # 3. Log in to the GitHub Container Registry (GHCR)
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 4. Build and push the Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Use the new lowercase environment variable
+          tags: ghcr.io/${{ env.repo_name_lc }}:${{ github.sha }}

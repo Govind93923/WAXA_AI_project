@@ -1,6 +1,5 @@
 name: Build and Push Docker Image
 
-# This workflow runs on any push to the 'main' branch
 on:
   push:
     branches: [ "main" ]
@@ -8,13 +7,12 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    # We need write permissions for packages to push to GHCR
     permissions:
       contents: read
       packages: write
 
     steps:
-      # 1. Checkout the repository code
+      # 1. (IMPORTANT) Checkout the repository code
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -37,5 +35,4 @@ jobs:
         with:
           context: .
           push: true
-          # Use the new lowercase environment variable
           tags: ghcr.io/${{ env.repo_name_lc }}:${{ github.sha }}

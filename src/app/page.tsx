@@ -70,7 +70,7 @@ export default function HomePage() {
         {/* Footer */}
         <footer className="text-center p-4 bg-gray-900 border-t border-gray-700">
           <p className="text-sm text-gray-500">
-            Created by [Your Name]
+            Created by [Nimmakuri Jayandra Siva GOvind]
           </p>
         </footer>
       </div>

@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js DevOps Assessment
 
-## Getting Started
+This project demonstrates how to containerize a **Next.js application** using **Docker**, automate the build and push using **GitHub Actions**, and deploy it to **Kubernetes (Minikube)**.
 
-First, run the development server:
+---
 
+## 1. Setup Instructions
+
+### Clone the Repository
 ```bash
+git clone <your-repo-link>
+cd <your-repo-folder>
+Install Dependencies
+bash
+Copy code
+npm install
+Run Locally
+bash
+Copy code
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+App runs on 👉 http://localhost:3000
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Docker Commands
+Build Docker Image
+bash
+Copy code
+docker build -t nextjs-app .
+Run Container
+bash
+Copy code
+docker run -d -p 3000:3000 nextjs-app
+Now open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. GitHub Actions (CI/CD)
+Builds Docker image on push to main
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Pushes image to GitHub Container Registry (GHCR)
 
-## Learn More
+Example image URL:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+bash
+Copy code
+ghcr.io/<your-username>/nextjs-app:latest
+4. Kubernetes (Minikube)
+Start Minikube
+bash
+Copy code
+minikube start
+Apply Manifests
+bash
+Copy code
+kubectl apply -f k8s/
+Check Pods and Services
+bash
+Copy code
+kubectl get pods
+kubectl get svc
+Access the App
+bash
+Copy code
+minikube service nextjs-service
+5. Project Structure
+swift
+Copy code
+├── k8s/
+│   ├── deployment.yaml
+│   └── service.yaml
+├── .github/workflows/ci-cd.yml
+├── Dockerfile
+├── pages/
+├── public/
+└── README.md
+6. Author
+Jayandra Siva Govind Nimmakuri
